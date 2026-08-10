@@ -101,7 +101,7 @@ A bare "write me a button label" prompt tends to return exactly the copy this sk
 Cut patterns that read as generated before the copy ships: promotional adjectives (seamless, effortless), negative parallelism ("it's not just X - it's Y"), filler openers ("in order to"), and copula avoidance ("serves as" instead of "is"). This skill checks every draft against eight questions; `references/banned-patterns.md` has the full table.
 
 **What are AI writing tells?**
-Patterns that show up disproportionately in generated text: promotional adjectives, negative parallelism, vague attributions, forced rule-of-three lists, em dash overuse, generic upbeat closers. In interface copy they also show up as Title Case buttons and "Oops!" errors with no fact. `references/banned-patterns.md` lists all 11 with a before/after example each.
+Patterns that show up disproportionately in generated text: promotional adjectives, negative parallelism, vague attributions, forced rule-of-three lists, em dashes (one is enough to read as generated, which is why the check here fires at one, not at two), generic upbeat closers. In interface copy they also show up as Title Case buttons and "Oops!" errors with no fact. `references/banned-patterns.md` lists all 11 with a before/after example each.
 
 **How do I write good error messages?**
 State what happened, then how to fix it. "The project didn't delete because it still has 2 members assigned. Remove the members first, then try again" beats "Oops! Something went wrong" - it gives a fact and an action, not an apology. Never blame the user.

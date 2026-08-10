@@ -86,7 +86,7 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 
 1. **Preamble?** Does the line open with framing like "Here's your..." or "This will..." instead of stating the message directly? -> Delete the opener.
 2. **Negative parallelism?** Any shape like "not just a button - it's peace of mind"? -> Drop the negative half, state the positive claim directly.
-3. **Em-dash count?** More than one em dash in the line? -> Replace with a period or " - ".
+3. **Em dash?** Any em dash (—) at all, or an en dash (–) doing an em dash's job between words? The threshold is zero, not two: one em dash in a shipped line already breaks the rule below, and a line short enough to be a button, a toast, or an error rarely holds two, so a "more than one" gate never fires on real interface copy. -> Replace it with a period, a comma, or " - ". A string quoted verbatim is the only exception (see edge cases).
 4. **Promotional adjective?** "Seamless", "effortless", "powerful", "intuitive", "robust", "cutting-edge"? -> Cut it, or replace with the concrete fact it was standing in for.
 5. **Title Case?** A button or label capitalized like a headline instead of sentence case? -> Lowercase everything but the first word and proper nouns.
 6. **Filler verb?** "In order to", "serves as", "is used to" where "to" or "is" would do? -> Replace with the plain verb.
@@ -103,11 +103,12 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 | Element type isn't stated (write mode) | Infer it from context, write the copy, and name the inferred type in the output so the user can correct it. |
 | Existing copy already reads fine (strip mode) | Say so and skip the rewrite. An empty "nothing to fix" is a valid result, not a failure to find something. |
 | Copy contains a real number or fact from the product | Preserve it exactly. Never invent or round a count, price, or limit that isn't in the input. |
+| Copy quotes a string that has to stay verbatim (a legal clause, a third-party product name, text the user typed) | An em dash inside the quotation stays. Fix the ones outside it, and name the one you left and why. An exact quote beats a clean dash count. |
 
 ## Rules that hold in both modes
 
 - Sentence case for every button, label, and heading in shipped copy - no exceptions.
-- No em dash in shipped copy. Use a period, a comma, or " - " instead.
+- No em dash in shipped copy, and no en dash standing in for one. Zero, not "not too many". Use a period, a comma, or " - " instead. A verbatim quotation is the only place one survives.
 - Never invent a number, a guarantee, or a capability that isn't in the input.
 - A failed self-check item means a rewrite, not a footnote explaining the tradeoff.
 - Compliance-reviewed copy needs a human sign-off before a meaning-changing edit ships.
