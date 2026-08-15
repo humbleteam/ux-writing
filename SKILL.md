@@ -9,7 +9,7 @@ Write interface copy that reads like someone thought about the specific screen, 
 
 ## Step 0 - load the pattern table
 
-Before writing or rewriting anything, read [references/banned-patterns.md](references/banned-patterns.md) if it is not already in context. It has the 11 AI-tell patterns this skill checks for, each with a bad and fixed example in interface copy. Do not skip this even if the patterns look familiar - the exact wording matters for a consistent check every run.
+Before writing or rewriting anything, read [references/banned-patterns.md](references/banned-patterns.md) if it is not already in context. It has the 13 AI-tell patterns this skill checks for, each with a bad and fixed example in interface copy. Do not skip this even if the patterns look familiar - the exact wording matters for a consistent check every run.
 
 ## Step 1 - pick a mode
 
@@ -57,13 +57,17 @@ If the user names it, use that. If not, infer it from shape - a short imperative
 
 ### 3b. Check against the pattern table
 
-Compare the copy against every row of [references/banned-patterns.md](references/banned-patterns.md), plus these element-specific tells:
+Compare the copy against every row of [references/banned-patterns.md](references/banned-patterns.md). Five of those rows are bound to a specific element rather than to copy in general, and they catch what the general rows miss:
 
-- Title Case on a button or label instead of sentence case.
-- An error message that opens with an apology ("Oops!", "Sorry!") and states no fact.
-- A confirmation that asks "Are you sure?" without naming what happens if the user says yes.
-- An exclamation mark carrying no information ("You're all set!" with nothing after it).
-- A decorative emoji the product's own established format did not already use.
+| What you see | Row it belongs to |
+|---|---|
+| Title Case on a button or label instead of sentence case | Title Case in labels |
+| An error that opens with an apology ("Oops!", "Sorry!") and states no fact | Apology with no fact |
+| A confirmation that asks "Are you sure?" without naming what happens if the user says yes | Unnamed consequence |
+| An exclamation mark carrying no information ("You're all set!" with nothing after it) | Generic positive closer |
+| A decorative emoji the product's own established format did not already use | Decorative emoji |
+
+Every tell named here has a row, because 3d has to report one. A tell with no row is a gap in the table, not a licence to invent a name for it.
 
 ### 3c. Rewrite, keep the meaning and the facts
 
@@ -78,7 +82,14 @@ Preserve every number, name, and specific claim in the original exactly - a rewr
 - Removed: <pattern name(s) from banned-patterns.md, comma-separated>
 ```
 
-One block per string the user gave. If the copy already reads fine, say so and skip the rewrite - do not manufacture a change to justify a response.
+One block per string the user gave.
+
+`Removed:` carries row names from `references/banned-patterns.md`, and on a block that ships a rewrite it is never empty. A rewrite and a named row go together in both directions:
+
+- **At least one row applied** -> rewrite the line, and name every row that applied, not just the first.
+- **No row applied** -> the copy reads fine. Say so and skip the rewrite. Do not manufacture a change to justify a response, and never invent a pattern name to fill the line.
+
+If a line is plainly wrong and no row covers it, ship the rewrite, put the row names that did apply on the `Removed:` line, and add a `Note:` line under the block naming the remaining defect in plain words and saying the table has no row for it. An honest gap belongs in the output; an invented row name sends the user to a reference file that does not have it.
 
 ## Step 4 - pre-ship self-check (run before either mode's output ships)
 

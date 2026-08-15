@@ -79,10 +79,28 @@ all 14 tasks inside it. This can't be undone.
 **Toast (success):** Project deleted.
 ```
 
+Example strip-mode output, for the error message in [Usage](#usage) above. The
+user supplied the cause along with the string: this is the error shown when an
+upload exceeds the 25 MB limit.
+
+```
+### Error message
+
+- Before: "Oops! Something went wrong. Please try again later."
+- After: "The file didn't upload because it's over the 25 MB limit. Try a
+  smaller file."
+- Removed: apology with no fact
+```
+
+Without that stated limit the rewrite could not name a cause either, and the
+skill asks for one instead of picking a plausible failure. The rule is the same
+one that governs numbers: what the input does not say, the output does not say.
+
 ## How it works
 
 - **Mode detection first.** A component or flow with no existing copy triggers write mode; a string of copy, or a request to fix copy that "sounds AI", triggers strip mode.
-- **The pattern table loads before either mode runs.** `references/banned-patterns.md` holds 11 AI-tell patterns, each with a bad and fixed example, checked before a draft is done.
+- **The pattern table loads before either mode runs.** `references/banned-patterns.md` holds 13 AI-tell patterns, each with a bad and fixed example, checked before a draft is done.
+- **A rewrite names the pattern it removed.** Strip mode reports the specific rows that applied, and a block that ships a rewrite never reports an empty list. No row applied means the copy reads fine and the rewrite is skipped, not invented.
 - **Buttons name the outcome.** Verb first, then the object, sentence case - never a bare "Submit" or "OK" when a concrete outcome exists to name.
 - **Errors state cause, then fix.** What happened, then how to fix it - no blame language, no meaningless apology.
 - **Empty states name what's missing and the one action that fills it.** Never a bare "Nothing here yet" with no next step.
@@ -101,7 +119,7 @@ A bare "write me a button label" prompt tends to return exactly the copy this sk
 Cut patterns that read as generated before the copy ships: promotional adjectives (seamless, effortless), negative parallelism ("it's not just X - it's Y"), filler openers ("in order to"), and copula avoidance ("serves as" instead of "is"). This skill checks every draft against eight questions; `references/banned-patterns.md` has the full table.
 
 **What are AI writing tells?**
-Patterns that show up disproportionately in generated text: promotional adjectives, negative parallelism, vague attributions, forced rule-of-three lists, em dashes (one is enough to read as generated, which is why the check here fires at one, not at two), generic upbeat closers. In interface copy they also show up as Title Case buttons and "Oops!" errors with no fact. `references/banned-patterns.md` lists all 11 with a before/after example each.
+Patterns that show up disproportionately in generated text: promotional adjectives, negative parallelism, vague attributions, forced rule-of-three lists, em dashes (one is enough to read as generated, which is why the check here fires at one, not at two), generic upbeat closers. In interface copy they also show up as Title Case buttons, "Oops!" errors with no fact, and "Are you sure?" dialogs that never say what happens if you are. `references/banned-patterns.md` lists all 13 with a before/after example each.
 
 **How do I write good error messages?**
 State what happened, then how to fix it. "The project didn't delete because it still has 2 members assigned. Remove the members first, then try again" beats "Oops! Something went wrong" - it gives a fact and an action, not an apology. Never blame the user.
