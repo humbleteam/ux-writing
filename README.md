@@ -28,7 +28,7 @@ ux-writing takes a UI component or flow - a button, an error message, an empty s
 
 ## What it does
 
-- Writes microcopy for buttons, errors, empty states, confirmations, placeholders, tooltips, and toasts - one shippable line per element.
+- Writes microcopy for buttons, errors, empty states, confirmations, placeholders, tooltips, and toasts - one line per element, shippable as it stands or carrying a marked slot for a product fact the request never gave.
 - Rewrites existing copy that reads AI-generated, in strip mode, line by line, with Before/After pairs.
 - Runs every draft through an eight-question pre-ship self-check; a failed check forces a rewrite, not a footnote.
 - Names the outcome in every button label instead of a bare verb like "Submit" or "OK".
@@ -61,22 +61,41 @@ To verify: restart Claude Code, then ask it to list its skills. Skills load auto
 
 ## Example output
 
-Example write-mode output for a fictional delete-project flow - names invented for illustration:
+Example write-mode output for a fictional delete-project flow. The request named
+the flow and nothing else - no data model, no failure modes:
 
 ```
 ## Delete project flow
 
 **Button (destructive):** Delete project
 
-**Confirmation dialog:** Delete "Q3 Roadmap"? This removes the project and
-all 14 tasks inside it. This can't be undone.
+**Confirmation dialog:** Delete "<project name>"? This removes the project and
+all <n> <items> inside it. This can't be undone.
 
 **Buttons:** Cancel / Delete project
 
-**Error (delete failed):** The project didn't delete because it still has
-2 members assigned. Remove the members first, then try again.
+**Error (delete failed):** The project didn't delete because <cause>. <Fix for
+that cause>.
 
 **Toast (success):** Project deleted.
+
+**Needs:** Confirmation - what does a project hold, and how many of them go
+with it; Error - what actually blocks a delete in this product.
+```
+
+The button and the toast are finished copy: their rules need nothing the request
+did not carry. The confirmation and the error are drafts, because a named
+consequence and a stated cause are facts about the product, and the slots mark
+the two the request never gave. Answering them - a project holds tasks, this one
+holds 14, and a delete is blocked while members are still assigned, 2 on this
+project - fills the slots, drops the `Needs:` line, and re-emits the block:
+
+```
+**Confirmation dialog:** Delete "Q3 Roadmap"? This removes the project and
+all 14 tasks inside it. This can't be undone.
+
+**Error (delete failed):** The project didn't delete because it still has
+2 members assigned. Remove the members first, then try again.
 ```
 
 Example strip-mode output, for the error message in [Usage](#usage) above. The
@@ -106,6 +125,7 @@ one that governs numbers: what the input does not say, the output does not say.
 - **Empty states name what's missing and the one action that fills it.** Never a bare "Nothing here yet" with no next step.
 - **Destructive confirmations name the consequence.** What gets removed, how much, whether it's reversible - never a generic "Are you sure?"
 - **Placeholder text is never a label's substitute.** If removing it would leave a field unlabeled, that's a bug to flag, not a copy choice.
+- **A fact the request never gave becomes a slot, not a guess.** Write mode marks the missing count or cause where it belongs and asks for it on a `Needs:` line; the elements in the same block whose rules need no product fact still ship as finished copy.
 - **The eight-question self-check runs before every output ships.** One "yes" sends the line back for a rewrite.
 - **Legal or compliance-reviewed copy gets flagged, not silently rewritten.** A meaning-changing edit needs a human sign-off first.
 

@@ -37,7 +37,20 @@ If the user names the element (button, error, empty state), use it directly. If 
 | Toast / inline notification | States the result, past tense. No exclamation mark unless a provided brand voice guide calls for it. | `<Object> <past-tense result>.` - "Project deleted." |
 | Field label | Sentence case. Names the field's content, not an instruction. | short noun phrase |
 
-### 2c. Output format - write mode
+### 2c. Facts the line needs and the input does not have
+
+Two of the rules in 2b turn on a fact about the product rather than on the element: a destructive confirmation names how much goes and whether it comes back, and an error names what happened. A request often describes the flow and not the data - "write the copy for deleting a project" says nothing about what a project holds or about what blocks a delete - and self-check 8 forbids shipping a number or a cause the input never confirmed. That leaves the line with a rule it cannot satisfy and a gate it cannot pass.
+
+Do not pick a plausible value. Write the line with the missing fact as a named slot in the position it belongs, and ask for it under the block:
+
+- **Slot, not a guess.** Angle brackets around what is needed: `all <n> tasks inside it`, never `all 14 tasks inside it` on a request that never mentioned tasks.
+- **A line carrying a slot is a draft.** It does not ship until the slot is filled, and the `Needs:` line says so by existing.
+- **One question per slot**, in the order the slots appear, each naming the element it belongs to.
+- **Answered, the block is re-emitted whole** with the slots filled and the `Needs:` line dropped.
+
+Elements whose rules need no product fact ship as finished copy in the same block. A missing count in the confirmation does not hold up the button label next to it.
+
+### 2d. Output format - write mode
 
 ```
 ## <Component or flow name>
@@ -45,9 +58,11 @@ If the user names the element (button, error, empty state), use it directly. If 
 **<Element type>:** <copy>
 **<Element type>:** <copy>
 **<Element type>:** <copy>
+
+**Needs:** <one question per slot, semicolon-separated>
 ```
 
-One line per element, labeled by type, in the order a user would meet them. For a multi-element flow (a delete confirmation, say), that order is usually: button, confirmation dialog, error, success toast.
+One line per element, labeled by type, in the order a user would meet them. The `Needs:` line appears only when a line in the block carries a slot - an empty one is never shipped, the same way an empty `Removed:` is not. For a multi-element flow (a delete confirmation, say), that order is usually: button, confirmation dialog, error, success toast.
 
 ## Step 3 - strip mode
 
@@ -102,7 +117,7 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 5. **Title Case?** A button or label capitalized like a headline instead of sentence case? -> Lowercase everything but the first word and proper nouns.
 6. **Filler verb?** "In order to", "serves as", "is used to" where "to" or "is" would do? -> Replace with the plain verb.
 7. **Generic closer?** "Enjoy!", "Happy exploring!", or an exclamation mark with nothing after it? -> Delete it, or replace with the actual next step.
-8. **Unverifiable claim?** A number, guarantee, or capability stated as fact that isn't confirmed by the input? -> Cut it, or flag it for the user to confirm before it ships.
+8. **Unverifiable claim?** A number, guarantee, or capability stated as fact that isn't confirmed by the input? -> In write mode, turn it into a slot and ask for it on the `Needs:` line (2c). In strip mode, cut it - the rewrite carries the facts the original carried and no others. "Flag it" means one of those two shapes; a guessed fact does not ship with a caveat attached to it.
 
 ## Edge cases
 
@@ -112,6 +127,7 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 | A brand voice guide is provided | It wins over the defaults in this skill wherever the two conflict. Apply the voice guide's rules first, and fall back to this skill's rules for anything the guide doesn't cover. |
 | Request is for non-English copy | The structural rules hold in any language (verb-led buttons, cause-then-fix errors, named consequences). Say plainly that the vocabulary list in `references/banned-patterns.md` is English-specific and does not transfer word for word. |
 | Element type isn't stated (write mode) | Infer it from context, write the copy, and name the inferred type in the output so the user can correct it. |
+| An element's rule needs a product fact the request never gave (how many items a delete removes, why an upload fails) | Write the line with a named slot where the fact belongs and ask for it on the `Needs:` line. Never fill a slot with a plausible value, and never drop the element to avoid the question - a confirmation with no consequence named is the pattern this skill exists to catch. |
 | Existing copy already reads fine (strip mode) | Say so and skip the rewrite. An empty "nothing to fix" is a valid result, not a failure to find something. |
 | Copy contains a real number or fact from the product | Preserve it exactly. Never invent or round a count, price, or limit that isn't in the input. |
 | Copy quotes a string that has to stay verbatim (a legal clause, a third-party product name, text the user typed) | An em dash inside the quotation stays. Fix the ones outside it, and name the one you left and why. An exact quote beats a clean dash count. |
@@ -120,7 +136,7 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 
 - Sentence case for every button, label, and heading in shipped copy - no exceptions.
 - No em dash in shipped copy, and no en dash standing in for one. Zero, not "not too many". Use a period, a comma, or " - " instead. A verbatim quotation is the only place one survives.
-- Never invent a number, a guarantee, or a capability that isn't in the input.
+- Never invent a number, a guarantee, or a capability that isn't in the input. In write mode it becomes a slot and a `Needs:` question; in strip mode it is cut.
 - A failed self-check item means a rewrite, not a footnote explaining the tradeoff.
 - Compliance-reviewed copy needs a human sign-off before a meaning-changing edit ships.
 - Keep the tone direct. No hedging ("this might possibly need a better label") - either fix it or leave it.

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0] - 2026-09-05
+
+- Fixed write mode's version of the deadlock strip mode lost on 2026-08-15. Two of the element rules in step 2b turn on a fact about the product rather than about the element: a destructive confirmation names how much goes and whether it comes back, and an error names what happened. A request usually describes the flow and not the data - "write the copy for deleting a project" says nothing about what a project holds or about what blocks a delete - while self-check 8 forbids shipping a number or a cause the input never confirmed. The line had a rule it could not satisfy and a gate it could not pass, and the only routes on offer were a plausible invention or a confirmation with no consequence named, which is the pattern this skill exists to catch.
+- New step 2c: a fact the request never gave is written as a named slot in the position it belongs (`all <n> tasks inside it`), and asked for under the block. A line carrying a slot is a draft; elements whose rules need no product fact still ship as finished copy in the same block.
+- The write-mode output format gained a `Needs:` line, one question per slot, present only when a line carries one - an empty `Needs:` is never shipped, the same way an empty `Removed:` is not. Answered, the block is re-emitted with the slots filled and the line dropped.
+- Self-check 8's "flag it" now names its two shapes instead of leaving them to the reader: a slot and a `Needs:` question in write mode, a cut in strip mode. A guessed fact does not ship with a caveat attached.
+- Fixed the README's write-mode example, which had the bug in miniature: on a request that named the flow and nothing else, it returned a confirmation counting 14 tasks and an error blaming 2 assigned members, both invented, under a caption that excused invented names only. It now shows the slot form for that request and the filled block once the facts are supplied.
+
 ## [1.2.0] - 2026-08-15
 
 - Fixed strip mode's `Removed:` line, which had no legal value on the copy this skill is handed most often. Step 3b checked five element-specific tells on top of the pattern table, and two of them - an error that opens with an apology and states no fact, and a confirmation that asks "Are you sure?" without naming the consequence - had no row in `references/banned-patterns.md`. Step 3d requires that line to name rows from that file, so the rewrite of "Oops! Something went wrong. Please try again later." had to either report nothing, which reads as "no change was needed" next to a line that was visibly rewritten, or invent a pattern name pointing at a reference file that does not have it.
