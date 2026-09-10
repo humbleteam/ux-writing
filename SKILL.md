@@ -84,9 +84,18 @@ Compare the copy against every row of [references/banned-patterns.md](references
 
 Every tell named here has a row, because 3d has to report one. A tell with no row is a gap in the table, not a licence to invent a name for it.
 
-### 3c. Rewrite, keep the meaning and the facts
+### 3c. Rewrite: keep the facts, slot the ones the fix needs
 
 Preserve every number, name, and specific claim in the original exactly - a rewrite that fixes tone but changes a fact is a worse bug than the tone. If the copy contains no real facts to preserve (pure filler), the rewrite can be shorter than the original.
+
+Two of the rows in 3b are only fixable by adding a fact. `Apology with no fact` is fixed by naming what happened; `Unnamed consequence` is fixed by naming what goes and whether it comes back. "Oops! Something went wrong. Please try again later." and "Are you sure?" are the two lines this skill is handed most often, and neither one carries the fact its own fix needs. Cutting is not available - there is nothing invented in the original to cut - and the row applied, so 3d has already ruled out skipping the rewrite. That leaves a plausible guess, which is the thing this skill exists to stop.
+
+The write-mode remedy holds here too. Where the missing fact came from decides which way it goes:
+
+- **The original claims it and the input never confirmed it** -> cut it. The rewrite carries the facts the original carried and no others. This is self-check 8's original case, unchanged.
+- **The fix needs it and neither the original nor the request carries it** -> write it as a named slot in the position it belongs (`all <n> <items> inside it`, `because <cause>`) and ask for it on a `Needs:` line under the block.
+
+A rewrite carrying a slot is a draft, exactly as in write mode: it does not ship until the slot is filled, and the `Needs:` line says so by existing. Answered, the block is re-emitted with the slots filled and the line dropped. A slot never appears on the `Before:` line - the original is quoted as the user gave it, tells and all.
 
 ### 3d. Output format - strip mode
 
@@ -95,9 +104,12 @@ Preserve every number, name, and specific claim in the original exactly - a rewr
 - Before: "<original copy>"
 - After: "<rewrite>"
 - Removed: <pattern name(s) from banned-patterns.md, comma-separated>
+- Needs: <one question per slot the rewrite carries>
 ```
 
 One block per string the user gave.
+
+`Needs:` appears only on a block whose rewrite carries a slot (3c), one question per slot, in the order the slots appear. An empty `Needs:` is never shipped, the same way an empty `Removed:` is not.
 
 `Removed:` carries row names from `references/banned-patterns.md`, and on a block that ships a rewrite it is never empty. A rewrite and a named row go together in both directions:
 
@@ -117,7 +129,7 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 5. **Title Case?** A button or label capitalized like a headline instead of sentence case? -> Lowercase everything but the first word and proper nouns.
 6. **Filler verb?** "In order to", "serves as", "is used to" where "to" or "is" would do? -> Replace with the plain verb.
 7. **Generic closer?** "Enjoy!", "Happy exploring!", or an exclamation mark with nothing after it? -> Delete it, or replace with the actual next step.
-8. **Unverifiable claim?** A number, guarantee, or capability stated as fact that isn't confirmed by the input? -> In write mode, turn it into a slot and ask for it on the `Needs:` line (2c). In strip mode, cut it - the rewrite carries the facts the original carried and no others. "Flag it" means one of those two shapes; a guessed fact does not ship with a caveat attached to it.
+8. **Unverifiable claim?** A number, guarantee, or capability stated as fact that isn't confirmed by the input? -> In write mode, turn it into a slot and ask for it on the `Needs:` line (2c). In strip mode it turns on where the fact came from (3c): a claim the original made and the input never confirmed is cut, and a fact the fix itself needs becomes a slot and a `Needs:` question. "Flag it" means one of those shapes; a guessed fact does not ship with a caveat attached to it.
 
 ## Edge cases
 
@@ -128,6 +140,7 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 | Request is for non-English copy | The structural rules hold in any language (verb-led buttons, cause-then-fix errors, named consequences). Say plainly that the vocabulary list in `references/banned-patterns.md` is English-specific and does not transfer word for word. |
 | Element type isn't stated (write mode) | Infer it from context, write the copy, and name the inferred type in the output so the user can correct it. |
 | An element's rule needs a product fact the request never gave (how many items a delete removes, why an upload fails) | Write the line with a named slot where the fact belongs and ask for it on the `Needs:` line. Never fill a slot with a plausible value, and never drop the element to avoid the question - a confirmation with no consequence named is the pattern this skill exists to catch. |
+| The row that applied is only fixable by adding a fact the input never gave ("Are you sure?", "Oops! Something went wrong.") | Rewrite with a named slot where the fact belongs and ask for it on the `Needs:` line. Do not skip the rewrite - a row applied, so the copy is not fine - and do not fill the slot with a plausible cause or count. |
 | Existing copy already reads fine (strip mode) | Say so and skip the rewrite. An empty "nothing to fix" is a valid result, not a failure to find something. |
 | Copy contains a real number or fact from the product | Preserve it exactly. Never invent or round a count, price, or limit that isn't in the input. |
 | Copy quotes a string that has to stay verbatim (a legal clause, a third-party product name, text the user typed) | An em dash inside the quotation stays. Fix the ones outside it, and name the one you left and why. An exact quote beats a clean dash count. |
@@ -136,7 +149,7 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 
 - Sentence case for every button, label, and heading in shipped copy - no exceptions.
 - No em dash in shipped copy, and no en dash standing in for one. Zero, not "not too many". Use a period, a comma, or " - " instead. A verbatim quotation is the only place one survives.
-- Never invent a number, a guarantee, or a capability that isn't in the input. In write mode it becomes a slot and a `Needs:` question; in strip mode it is cut.
+- Never invent a number, a guarantee, or a capability that isn't in the input. A fact the line's own rule needs becomes a slot and a `Needs:` question, in either mode; a claim the original made and the input never confirmed is cut.
 - A failed self-check item means a rewrite, not a footnote explaining the tradeoff.
 - Compliance-reviewed copy needs a human sign-off before a meaning-changing edit ships.
 - Keep the tone direct. No hedging ("this might possibly need a better label") - either fix it or leave it.

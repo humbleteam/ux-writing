@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.0] - 2026-09-10
+
+- Fixed strip mode on the two lines the skill is handed most often. Step 3b maps "Oops! Something went wrong. Please try again later." to the `Apology with no fact` row and "Are you sure?" to `Unnamed consequence`, and both of those rows are fixed by adding a fact - what failed, what gets removed - rather than by cutting one. Neither input carries that fact. Step 3d says a row that applied means a rewrite ships, so skipping was closed; self-check 8 said "in strip mode, cut it", and there is nothing invented in "Are you sure?" to cut. The only remaining move was a plausible cause or count, which is the failure this skill exists to catch, and the README already promised the opposite - that the skill asks for the fact instead of picking one - without any shape in `SKILL.md` for the asking.
+- Step 3c now carries the write-mode remedy: a fact the fix itself needs and neither the original nor the request supplies is written as a named slot (`because <cause>`, `all <n> <items> inside it`) and asked for on a `Needs:` line. A rewrite carrying a slot is a draft, exactly as in write mode.
+- The two cases are told apart by where the fact came from, not by how it looks: a claim the original made and the input never confirmed is still cut, a fact the fix needs becomes a slot. Self-check 8 and the both-modes rule now say both halves.
+- Strip-mode output format gained the optional `Needs:` line, one question per slot, never shipped empty. A slot never appears on the `Before:` line - the original is quoted as the user gave it.
+- `references/banned-patterns.md` now says that the fixed examples for those two rows are the filled form, and gives the slot form that ships without the facts. Two of the 13 rows are fixed by adding a fact and 11 by cutting something, so those two are the only rows that can produce a slot.
+- Added a worked strip-mode example to the README for the same error with no cause supplied, next to the existing one where the user supplies it, plus a new edge case in `SKILL.md`.
+
 ## [1.3.0] - 2026-09-05
 
 - Fixed write mode's version of the deadlock strip mode lost on 2026-08-15. Two of the element rules in step 2b turn on a fact about the product rather than about the element: a destructive confirmation names how much goes and whether it comes back, and an error names what happened. A request usually describes the flow and not the data - "write the copy for deleting a project" says nothing about what a project holds or about what blocks a delete - while self-check 8 forbids shipping a number or a cause the input never confirmed. The line had a rule it could not satisfy and a gate it could not pass, and the only routes on offer were a plausible invention or a confirmation with no consequence named, which is the pattern this skill exists to catch.

@@ -29,7 +29,7 @@ ux-writing takes a UI component or flow - a button, an error message, an empty s
 ## What it does
 
 - Writes microcopy for buttons, errors, empty states, confirmations, placeholders, tooltips, and toasts - one line per element, shippable as it stands or carrying a marked slot for a product fact the request never gave.
-- Rewrites existing copy that reads AI-generated, in strip mode, line by line, with Before/After pairs.
+- Rewrites existing copy that reads AI-generated, in strip mode, line by line, with Before/After pairs, and names the pattern each fix removed.
 - Runs every draft through an eight-question pre-ship self-check; a failed check forces a rewrite, not a footnote.
 - Names the outcome in every button label instead of a bare verb like "Submit" or "OK".
 - Writes error copy as what happened plus how to fix it, with no blame and no bare apology.
@@ -111,9 +111,23 @@ upload exceeds the 25 MB limit.
 - Removed: apology with no fact
 ```
 
-Without that stated limit the rewrite could not name a cause either, and the
-skill asks for one instead of picking a plausible failure. The rule is the same
-one that governs numbers: what the input does not say, the output does not say.
+Without that stated limit the rewrite has no cause to name, and naming the cause
+is the fix for this row. The line comes back with a slot where the cause belongs
+and the question under it, the same shape write mode uses:
+
+```
+### Error message
+
+- Before: "Oops! Something went wrong. Please try again later."
+- After: "The file didn't upload because <cause>. <Fix for that cause>."
+- Removed: apology with no fact
+- Needs: what actually blocks an upload in this product
+```
+
+The rule is the same one that governs numbers: what the input does not say, the
+output does not say. Eleven of the 13 patterns are fixed by cutting something,
+so no slot can arise on them - only the two fixed by adding a fact, an apology
+with no fact and an unnamed consequence, can produce one.
 
 ## How it works
 
@@ -125,7 +139,7 @@ one that governs numbers: what the input does not say, the output does not say.
 - **Empty states name what's missing and the one action that fills it.** Never a bare "Nothing here yet" with no next step.
 - **Destructive confirmations name the consequence.** What gets removed, how much, whether it's reversible - never a generic "Are you sure?"
 - **Placeholder text is never a label's substitute.** If removing it would leave a field unlabeled, that's a bug to flag, not a copy choice.
-- **A fact the request never gave becomes a slot, not a guess.** Write mode marks the missing count or cause where it belongs and asks for it on a `Needs:` line; the elements in the same block whose rules need no product fact still ship as finished copy.
+- **A fact the request never gave becomes a slot, not a guess.** Both modes mark the missing count or cause where it belongs and ask for it on a `Needs:` line: write mode when an element's rule needs a fact the request skipped, strip mode when the pattern that applied is one of the two fixed by adding a fact rather than cutting one. Elements whose rules need no product fact still ship as finished copy in the same block.
 - **The eight-question self-check runs before every output ships.** One "yes" sends the line back for a rewrite.
 - **Legal or compliance-reviewed copy gets flagged, not silently rewritten.** A meaning-changing edit needs a human sign-off first.
 
