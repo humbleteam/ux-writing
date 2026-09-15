@@ -12,7 +12,7 @@
 
 </div>
 
-ux-writing takes a UI component or flow - a button, an error message, an empty state, a confirmation dialog - and returns copy ready to ship: a verb-led label, a plain-language error, a consequence-named confirmation. Given copy that already exists, it switches to strip mode and rewrites it line by line, naming the pattern each fix removed. A pre-ship self-check keeps either mode from drifting into generic filler: eight yes/no questions run against every draft, and one "yes" sends the line back for a rewrite.
+ux-writing takes a UI component or flow - a button, an error message, an empty state, a confirmation dialog - and returns copy ready to ship: a verb-led label, a plain-language error, a consequence-named confirmation. Given copy that already exists, it switches to strip mode and rewrites it line by line, naming the pattern each fix removed and the element rule the line failed. A pre-ship self-check keeps either mode from drifting into generic filler: eight yes/no questions run against every draft, and one "yes" sends the line back for a rewrite.
 
 ## Table of contents
 
@@ -29,7 +29,7 @@ ux-writing takes a UI component or flow - a button, an error message, an empty s
 ## What it does
 
 - Writes microcopy for buttons, errors, empty states, confirmations, placeholders, tooltips, and toasts - one line per element, shippable as it stands or carrying a marked slot for a product fact the request never gave.
-- Rewrites existing copy that reads AI-generated, in strip mode, line by line, with Before/After pairs, and names the pattern each fix removed.
+- Rewrites existing copy that reads AI-generated, in strip mode, line by line, with Before/After pairs, naming the pattern each fix removed and the element rule the line failed.
 - Runs every draft through an eight-question pre-ship self-check; a failed check forces a rewrite, not a footnote.
 - Names the outcome in every button label instead of a bare verb like "Submit" or "OK".
 - Writes error copy as what happened plus how to fix it, with no blame and no bare apology.
@@ -129,17 +129,39 @@ output does not say. Eleven of the 13 patterns are fixed by cutting something,
 so no slot can arise on them - only the two fixed by adding a fact, an apology
 with no fact and an unnamed consequence, can produce one.
 
+The pattern table is one of two checks, though, and a slot can also come from
+the other. Strip mode reads the copy against its element's own rule as well, and
+a line can carry no tell at all and still fail the job its type has. A bare empty
+state is the clearest case: it has no adjective, no dash, no Title Case and no
+closer, so every one of the 13 patterns comes back clean, while the empty-state
+rule names that exact wording as the failure.
+
+```
+### Empty state
+
+- Before: "Nothing here yet."
+- After: "No <items> yet. <Action that creates the first one>."
+- Rule: an empty state names what belongs in the space and the one action that
+  fills it
+- Needs: what belongs in this list, and what action puts the first one there
+```
+
+There is no `Removed:` line on that block, because nothing came out - the fix
+puts something in, and the `Rule:` line is what reports it. A block that ships a
+rewrite carries at least one of the two lines, and a block that carries neither
+is the skip branch: the copy reads fine on both checks.
+
 ## How it works
 
 - **Mode detection first.** A component or flow with no existing copy triggers write mode; a string of copy, or a request to fix copy that "sounds AI", triggers strip mode.
 - **The pattern table loads before either mode runs.** `references/banned-patterns.md` holds 13 AI-tell patterns, each with a bad and fixed example, checked before a draft is done.
-- **A rewrite names the pattern it removed.** Strip mode reports the specific rows that applied, and a block that ships a rewrite never reports an empty list. No row applied means the copy reads fine and the rewrite is skipped, not invented.
+- **A rewrite names what it fixed, on one of two lines.** Strip mode runs two checks: the pattern table, reported on `Removed:`, and the element's own rule, reported on `Rule:`. A block that ships a rewrite carries at least one of them. Both checks clean means the copy reads fine and the rewrite is skipped, not invented - a clean table pass alone does not, which is how a bare "Nothing here yet" used to come back as good copy.
 - **Buttons name the outcome.** Verb first, then the object, sentence case - never a bare "Submit" or "OK" when a concrete outcome exists to name.
 - **Errors state cause, then fix.** What happened, then how to fix it - no blame language, no meaningless apology.
 - **Empty states name what's missing and the one action that fills it.** Never a bare "Nothing here yet" with no next step.
 - **Destructive confirmations name the consequence.** What gets removed, how much, whether it's reversible - never a generic "Are you sure?"
 - **Placeholder text is never a label's substitute.** If removing it would leave a field unlabeled, that's a bug to flag, not a copy choice.
-- **A fact the request never gave becomes a slot, not a guess.** Both modes mark the missing count or cause where it belongs and ask for it on a `Needs:` line: write mode when an element's rule needs a fact the request skipped, strip mode when the pattern that applied is one of the two fixed by adding a fact rather than cutting one. Elements whose rules need no product fact still ship as finished copy in the same block.
+- **A fact the request never gave becomes a slot, not a guess.** Both modes mark the missing count or cause where it belongs and ask for it on a `Needs:` line: write mode when an element's rule needs a fact the request skipped, strip mode when the pattern that applied is one of the two fixed by adding a fact rather than cutting one, or when the element rule the line failed is. Elements whose rules need no product fact still ship as finished copy in the same block.
 - **The eight-question self-check runs before every output ships.** One "yes" sends the line back for a rewrite.
 - **Legal or compliance-reviewed copy gets flagged, not silently rewritten.** A meaning-changing edit needs a human sign-off first.
 

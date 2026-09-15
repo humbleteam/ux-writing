@@ -27,12 +27,31 @@ All examples below are invented for illustration - no real product, client, or u
 - **Em dash**: the row was called "em-dash overuse" until 2026-08-10, and the name was the bug. One em dash in a button, a toast, or an error is already the tell, and an interface line is rarely long enough to carry two, so a threshold of two meant the check almost never fired while single-dash copy shipped. The threshold is one. An en dash (–) used between words in place of an em dash counts the same. The only survivor is an em dash inside a string quoted verbatim, and the output should say it was left on purpose.
 - **Decorative emoji**: emoji used inside the skill's own output examples (like the row above) are for illustration only. In shipped copy, an emoji is allowed only where the product's own established format already uses one - never added by a rewrite to look friendlier.
 - **Apology with no fact** and **Unnamed consequence**: both were listed as element-specific tells in `SKILL.md` step 3b from the start, and neither had a row here until 2026-08-15. That was a hole in the output rather than in the check. Strip-mode output names the row that applied, and "Oops! Something went wrong" is the single most common line the skill is handed, so its defect had no name to report and the "Removed" line had no legal value. An apology is not a fact: name what failed and what to do next. A destructive confirmation names what goes, how much of it, and whether it comes back.
-- **The fixed examples for those two rows are the filled form.** "the connection dropped" and "all 14 tasks inside it" are facts, and a rewrite only has them when the request supplied them. Handed the bad example alone, the shipped form is the slot form - "Your changes didn't save because `<cause>`. `<Fix for that cause>`." and "Delete "`<item>`"? This removes it and all `<n>` `<items>` inside it. This can't be undone." - with the missing facts asked for on the `Needs:` line (`SKILL.md` step 3c). These two rows are the only ones in the table whose fix adds a fact rather than removing one, which is why they are the only ones that can produce a slot.
+- **The fixed examples for those two rows are the filled form.** "the connection dropped" and "all 14 tasks inside it" are facts, and a rewrite only has them when the request supplied them. Handed the bad example alone, the shipped form is the slot form - "Your changes didn't save because `<cause>`. `<Fix for that cause>`." and "Delete "`<item>`"? This removes it and all `<n>` `<items>` inside it. This can't be undone." - with the missing facts asked for on the `Needs:` line (`SKILL.md` step 3c). These two rows are the only ones in the table whose fix adds a fact rather than removing one, which is why they are the only rows that can produce a slot. They are not the only source of one - see below.
 
 ## How to use this table
 
 In write mode, check a draft against every row before it ships. In strip mode, name the specific row(s) that applied to the original copy in the "Removed" line of the output - "Removed: promotional adjective, em dash" is more useful to the user than "Removed: AI tells".
 
-Five rows are bound to a specific element rather than to copy in general: Title Case in labels, Generic positive closer, Decorative emoji, Apology with no fact, and Unnamed consequence. They are still rows, checked the same way. Every tell this skill looks for has a row here, because a rewrite that ships has to name one - see `SKILL.md` step 3d for what to do with a defect this table does not cover.
+Five rows are bound to a specific element rather than to copy in general: Title Case in labels, Generic positive closer, Decorative emoji, Apology with no fact, and Unnamed consequence. They are still rows, checked the same way. Every tell this skill looks for has a row here, because a rewrite that names a row has to find one - see `SKILL.md` step 3d for what to do with a defect neither check covers.
 
 Eleven of the 13 rows are fixed by cutting something: an adjective, a dash, a closer, a capital letter. Two are fixed by adding a fact the copy never had, and a rewrite that does not have that fact ships a slot for it rather than a plausible one - `SKILL.md` step 3c.
+
+## What this table does not cover
+
+This table is one of the two checks strip mode runs, not the whole of it. It catches tells: something in the copy that reads as generated and comes out of the rewrite. It does not catch a line that carries no tell at all and still fails the job its element type has. That rule lives in `SKILL.md` step 2b, one row per element type, and reading it against the original is check 2 of step 3b.
+
+The gap is not a narrow one, and it falls on the strings this skill is handed most:
+
+| Copy | Rows here that apply | The 2b rule it fails |
+|---|---|---|
+| "Nothing here yet." (empty state) | none | Names what belongs in the space, then the one action that fills it |
+| "Submit" (button) | none | Starts with a verb and names the outcome |
+| "Save changes" as the tooltip on a Save changes button | none | States what the control does, never a restatement of its own label |
+| "Your project will be deleted." (toast after the delete ran) | none | States the result, past tense |
+
+Each of them passes all 13 rows. Read against this table alone they come back clean, and "Nothing here yet." is the one that shows what that costs: step 2b names that exact wording as the empty-state failure, so a table-only check reports the skill's own banned line as copy that reads fine.
+
+None of these four gets a row here, and the reason is what a row means. A row names something the rewrite took out, which is what the `Removed:` line reports. These fixes put something in. A rule failure is reported on its own `Rule:` line instead, so the two stay legible: `Removed: promotional adjective` and `Rule: an empty state names what belongs in the space and the action that fills it` are different kinds of statement about the same rewrite.
+
+Three of the 2b rules are satisfied by adding a fact the input may not carry - the empty state's two, the button's outcome, the error's cause - so check 2 can produce a slot and a `Needs:` question on copy where no row here applied at all (`SKILL.md` step 3c).
