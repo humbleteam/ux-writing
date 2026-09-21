@@ -70,6 +70,15 @@ One line per element, labeled by type, in the order a user would meet them. The 
 
 If the user names it, use that. If not, infer it from shape - a short imperative phrase reads as a button, a sentence describing a problem reads as an error, a question with an implied yes/no reads as a confirmation - and name the inferred type in the output so the user can correct it.
 
+An inferred type is not just a label on the output. Check 2 reads the 2b rule for the type named here, so a guess about the element decides which rule the copy is judged against, and the same string can pass one rule and fail another. "Save changes" handed over on its own is a short imperative phrase, so the shape heuristic calls it a button, and as a button it passes 2b - verb first, outcome named, sentence case. As the tooltip on a Save changes button it fails 2b for restating its own label, which is the case the check-2 table below already names. Nothing in the string separates the two, and the type is doing the deciding.
+
+So an inferred type is tested before its verdict ships. Name the one other type the string could plausibly be, and read that rule too:
+
+- **The two rules agree** - both pass, or both fail and the fix is the same line -> ship the block, naming the inferred type as above. Most strings land here: an apology with no fact is an error whichever neighbouring type you try.
+- **The two rules disagree** - one passes, the other fails -> the verdict would be a finding about the element, not about the copy. Ship what check 1 found, and ask which element it is, naming both candidates and what each would mean for the line (3d). Do not ship a rewrite that reshapes copy into the wrong element's shape.
+
+A type the user stated never runs this test. They said what it is, and the inference that could be wrong never happened.
+
 ### 3b. Two checks, not one
 
 **Check 1 - the pattern table.** Compare the copy against every row of [references/banned-patterns.md](references/banned-patterns.md). Five of those rows are bound to a specific element rather than to copy in general, and they catch what the general rows miss:
@@ -84,7 +93,7 @@ If the user names it, use that. If not, infer it from shape - a short imperative
 
 Every tell named here has a row, because 3d has to report one. A tell with no row is a gap in the table, not a licence to invent a name for it.
 
-**Check 2 - the element's own rule.** Look up the type named in 3a in the table in step 2b and read its rule against the original. The two checks do not overlap: the table asks whether the copy carries a tell, and the rule asks whether the line does the job its element type exists to do. A line can pass all 13 rows and still fail its rule, and the strings this skill is handed most often are exactly that shape:
+**Check 2 - the element's own rule.** Look up the type named in 3a in the table in step 2b and read its rule against the original. Where 3a inferred that type rather than reading it off the request, run 3a's test first: this check's verdict is only as good as the type it was run against. The two checks do not overlap: the table asks whether the copy carries a tell, and the rule asks whether the line does the job its element type exists to do. A line can pass all 13 rows and still fail its rule, and the strings this skill is handed most often are exactly that shape:
 
 | Copy | Rows that apply | The 2b rule it fails |
 |---|---|---|
@@ -123,18 +132,22 @@ Check 2 produces slots the same way, and on copy where no row applied at all. Th
 - Removed: <pattern name(s) from banned-patterns.md, comma-separated>
 - Rule: <the 2b rule for this element type that the original failed>
 - Needs: <one question per slot the rewrite carries>
+- Type: <the two candidate element types, and what each would mean for this line>
 ```
 
 One block per string the user gave.
 
-`Needs:` appears only on a block whose rewrite carries a slot (3c), one question per slot, in the order the slots appear. An empty `Needs:` is never shipped, and neither is an empty `Removed:` or an empty `Rule:`.
+`Needs:` appears only on a block whose rewrite carries a slot (3c), one question per slot, in the order the slots appear. An empty `Needs:` is never shipped, and neither is an empty `Removed:`, `Rule:` or `Type:`.
 
 The two report lines are not interchangeable. `Removed:` carries row names from `references/banned-patterns.md` - what came out of the copy. `Rule:` carries the 2b rule the original failed - what the copy never did. A fix that adds a fact has nothing to put on `Removed:`, and a fix that cuts an adjective has nothing to put on `Rule:`, so each line is present only when its own check found something:
 
 - **At least one row applied, or the 2b rule failed** -> rewrite the line. Name every row that applied on `Removed:`, not just the first, and name the failed rule on `Rule:`.
-- **Neither check found anything** -> the copy reads fine. Say so and skip the rewrite. Do not manufacture a change to justify a response, and never invent a pattern name to fill the line.
+- **Neither check found anything** -> the copy reads fine. Say so and skip the rewrite. Do not manufacture a change to justify a response, and never invent a pattern name to fill the line. Both checks have to have reached a verdict for this branch: a split type test means check 2 never did.
+- **3a's type test came back split** -> no verdict on check 2. Ship whatever check 1 found and the `Type:` question, and stop there.
 
-A block that ships a rewrite carries at least one of `Removed:` and `Rule:`, and a block that carries neither is the skip branch. "No row applied" on its own is not a verdict: it is one check out of two, and on a bare empty state or a bare "Submit" it is the expected result of the check that was never going to catch them.
+`Type:` is the one line that stands in for a verdict rather than reporting one, and a block carrying it has no `Rule:` line - 3a's test came back split, so no rule failure has been established and none can be named. What check 1 found still ships: the 13 rows read the copy and not the element, so `Removed:` and an `After:` carrying that fix are present when the table found something and absent when it did not. A block that is nothing but `Before:` and `Type:` is the honest shape for a string the table passed and whose answer turns on which element it is. It is not the skip branch, and it is not a rewrite either.
+
+A block that ships a rewrite carries at least one of `Removed:` and `Rule:`. A block that carries neither is the skip branch, unless it carries `Type:`, which says the second check has not run to a verdict yet. "No row applied" on its own is not a verdict: it is one check out of two, and on a bare empty state or a bare "Submit" it is the expected result of the check that was never going to catch them.
 
 If a line is plainly wrong and neither check covers it, ship the rewrite, put whatever each check did find on its own line, and add a `Note:` line under the block naming the remaining defect in plain words and saying neither the table nor the 2b rule covers it. An honest gap belongs in the output; an invented row name sends the user to a reference file that does not have it.
 
@@ -162,6 +175,8 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 | An element's rule needs a product fact the request never gave (how many items a delete removes, why an upload fails) | Write the line with a named slot where the fact belongs and ask for it on the `Needs:` line. Never fill a slot with a plausible value, and never drop the element to avoid the question - a confirmation with no consequence named is the pattern this skill exists to catch. |
 | The row that applied is only fixable by adding a fact the input never gave ("Are you sure?", "Oops! Something went wrong.") | Rewrite with a named slot where the fact belongs and ask for it on the `Needs:` line. Do not skip the rewrite - a row applied, so the copy is not fine - and do not fill the slot with a plausible cause or count. |
 | Strip mode is handed a line with no tell that still fails its element's rule ("Nothing here yet.", "Submit", a tooltip repeating its own label) | Rewrite it. No row applied is the expected result of check 1 here, not a verdict - check 2 is the one that catches these. Leave `Removed:` off the block, name the failed rule on `Rule:`, and slot any fact the fix needs. |
+| Strip mode infers the element type and the two plausible types disagree on the verdict (a bare "Save changes" - button, or the tooltip on a Save changes button) | Do not ship a verdict. Report what the table found, then ask which element it is, naming both candidates and what each would mean. A rewrite built on the wrong type reshapes copy that was already right for its element. |
+| Strip mode infers the element type and both plausible types give the same verdict | Ship the block as normal, naming the inferred type so the user can correct it. The test catches a split, it does not put a question on every inferred block. |
 | Strip mode is handed a placeholder and the input never says whether the field has a label | The placeholder rule turns on the label, which the string cannot show. Say what the rule turns on and ask. Do not assume a label is there, and do not report the bug on the assumption that it is not. |
 | Existing copy already reads fine (strip mode) | Say so and skip the rewrite. "Reads fine" means both checks came back clean, not only the table. An empty "nothing to fix" is a valid result, not a failure to find something. |
 | Copy contains a real number or fact from the product | Preserve it exactly. Never invent or round a count, price, or limit that isn't in the input. |
@@ -173,6 +188,7 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 - No em dash in shipped copy, and no en dash standing in for one. Zero, not "not too many". Use a period, a comma, or " - " instead. A verbatim quotation is the only place one survives.
 - Never invent a number, a guarantee, or a capability that isn't in the input. A fact the line's own rule needs becomes a slot and a `Needs:` question, in either mode; a claim the original made and the input never confirmed is cut.
 - Strip mode runs both checks, the pattern table and the element's own rule from 2b. A clean pass on the table is one check out of two, not a verdict that the copy reads fine.
+- An element type the request never stated is tested before its verdict ships: read the second plausible type's 2b rule too, and where the two disagree, ask which element it is rather than picking one. A stated type needs no test, and a split one produces a question, not a rewrite.
 - A failed self-check item means a rewrite, not a footnote explaining the tradeoff.
 - Compliance-reviewed copy needs a human sign-off before a meaning-changing edit ships.
 - Keep the tone direct. No hedging ("this might possibly need a better label") - either fix it or leave it.

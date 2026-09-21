@@ -151,11 +151,31 @@ puts something in, and the `Rule:` line is what reports it. A block that ships a
 rewrite carries at least one of the two lines, and a block that carries neither
 is the skip branch: the copy reads fine on both checks.
 
+That second check reads one rule, chosen by the element type, and the type is
+not always in the request. A string handed over on its own gets a type inferred
+from its shape, and for some strings the shape does not decide it:
+
+```
+### Element type unclear
+
+- Before: "Save changes"
+- Type: button, or the tooltip on a Save changes button? As a button this passes
+  - verb first, outcome named, sentence case. As the tooltip on that button it
+  restates its own label, which the tooltip rule forbids.
+```
+
+There is no `After:` and no `Rule:` line, because no rule failure has been
+established: the table came back clean, and the other check is waiting on which
+element this is. Shipping the button verdict would call the copy fine when it
+may be the tooltip case this skill already names as a failure, and shipping the
+tooltip verdict would rewrite a button label that was correct.
+
 ## How it works
 
 - **Mode detection first.** A component or flow with no existing copy triggers write mode; a string of copy, or a request to fix copy that "sounds AI", triggers strip mode.
 - **The pattern table loads before either mode runs.** `references/banned-patterns.md` holds 13 AI-tell patterns, each with a bad and fixed example, checked before a draft is done.
 - **A rewrite names what it fixed, on one of two lines.** Strip mode runs two checks: the pattern table, reported on `Removed:`, and the element's own rule, reported on `Rule:`. A block that ships a rewrite carries at least one of them. Both checks clean means the copy reads fine and the rewrite is skipped, not invented - a clean table pass alone does not, which is how a bare "Nothing here yet" used to come back as good copy.
+- **The second check is only as good as the element type it runs against.** Where the request states the type, it runs. Where the type was inferred from the shape of the string, the second plausible type's rule is read too: a bare "Save changes" passes the button rule and fails the tooltip rule, so the block asks which element it is instead of shipping either verdict as a finding about the copy.
 - **Buttons name the outcome.** Verb first, then the object, sentence case - never a bare "Submit" or "OK" when a concrete outcome exists to name.
 - **Errors state cause, then fix.** What happened, then how to fix it - no blame language, no meaningless apology.
 - **Empty states name what's missing and the one action that fills it.** Never a bare "Nothing here yet" with no next step.

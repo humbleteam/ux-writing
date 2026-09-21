@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.6.0] - 2026-09-21
+
+- Check 2 ran against a guessed element type with nothing testing the guess. 1.5.0 made strip mode read the 2b rule for the type named in 3a, and 3a names it two different ways: the user states it, or it is inferred from the shape of the string. An inferred type is a guess about the element that then decides which rule the copy is judged against, and the same string passes one rule and fails another.
+- The skill carried its own counterexample. "Save changes" is a short imperative phrase, so 3a's shape heuristic calls it a button, and as a button it passes 2b. The check-2 table one section below lists `"Save changes" as the tooltip on a Save changes button` as a rule failure, for restating its own label. Nothing in the string separates the two, and with the table also coming back clean the block went to 3d's skip branch and reported that the copy reads fine - the verdict 1.5.0 was written to stop, reached through the type instead of through the table.
+- Step 3a now tests an inferred type before its verdict ships: name the one other type the string could plausibly be and read that rule too. The two rules agreeing ships the block as before, which is where most strings land. The two disagreeing means the verdict would be a finding about the element rather than about the copy, so the block reports what check 1 found and asks which element it is. A type the user stated never runs the test.
+- Strip-mode output gained a `Type:` line, naming both candidates and what each would mean for the line. It is the one line that stands in for a verdict instead of reporting one: a block carrying it has no `Rule:` line, because no rule failure has been established, and it keeps `Removed:` and an `After:` when the table found something, because the 13 rows read the copy and not the element. `Before:` plus `Type:` alone is the honest shape for a string the table passed and whose answer turns on which element it is.
+- 3d's skip branch now says both checks have to have reached a verdict to use it. A split type test means check 2 never did, so "neither check found anything" no longer covers it.
+- New worked strip-mode example in the README for a bare "Save changes", and a "how it works" bullet saying the second check is only as good as the type it runs against. Two new edge cases, for a split type test and for an inferred type both candidates agree on, plus the rule in "Rules that hold in both modes".
+
 ## [1.5.0] - 2026-09-15
 
 - Fixed strip mode, which ran one check where the skill has two. Step 3b compared the copy against the 13 rows in `references/banned-patterns.md` and nothing else, so the element rules in step 2b - the other half of the skill, and the half that says what each element type has to do - were never read against an original. Step 3a already names the element type; nothing used it except the routing to five element-bound rows.
