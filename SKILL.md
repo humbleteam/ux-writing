@@ -9,7 +9,7 @@ Write interface copy that reads like someone thought about the specific screen, 
 
 ## Step 0 - load the pattern table
 
-Before writing or rewriting anything, read [references/banned-patterns.md](references/banned-patterns.md) if it is not already in context. It has the 13 AI-tell patterns this skill checks for, each with a bad and fixed example in interface copy. Do not skip this even if the patterns look familiar - the exact wording matters for a consistent check every run. The table is one of the two checks strip mode runs, not the whole of it: the other is the element's own rule in step 2b.
+Before writing or rewriting anything, read [references/banned-patterns.md](references/banned-patterns.md) if it is not already in context. It has the 13 AI-tell patterns this skill checks for, each with a bad and fixed example in interface copy. Do not skip this even if the patterns look familiar - the exact wording matters for a consistent check every run. The table is one of the two checks strip mode runs, not the whole of it: the other is the element's own rule in step 2b. Write mode has no check of its own that reads it - the table reaches a written draft only at the step 4 gate, which is also the only place it is read against a strip-mode rewrite.
 
 ## Step 1 - pick a mode
 
@@ -153,7 +153,9 @@ If a line is plainly wrong and neither check covers it, ship the rewrite, put wh
 
 ## Step 4 - pre-ship self-check (run before either mode's output ships)
 
-Scan the draft against these eight questions. **A single "yes" sends the line back for a rewrite** - this is a gate, not a suggestion.
+Scan the draft against these nine questions. **A single "yes" sends the line back for a rewrite** - this is a gate, not a suggestion.
+
+This gate is the only thing that reads the pattern table against a line this skill wrote. Check 1 in step 3b reads it against the original the user handed over, and nothing reads it against the rewrite that replaces it; write mode never runs it at all. Both of those drafts arrive here.
 
 1. **Preamble?** Does the line open with framing like "Here's your..." or "This will..." instead of stating the message directly? -> Delete the opener.
 2. **Negative parallelism?** Any shape like "not just a button - it's peace of mind"? -> Drop the negative half, state the positive claim directly.
@@ -163,6 +165,9 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 6. **Filler verb?** "In order to", "serves as", "is used to" where "to" or "is" would do? -> Replace with the plain verb.
 7. **Generic closer?** "Enjoy!", "Happy exploring!", or an exclamation mark with nothing after it? -> Delete it, or replace with the actual next step.
 8. **Unverifiable claim?** A number, guarantee, or capability stated as fact that isn't confirmed by the input? -> In write mode, turn it into a slot and ask for it on the `Needs:` line (2c). In strip mode it turns on where the fact came from (3c): a claim the original made and the input never confirmed is cut, and a fact the fix itself needs becomes a slot and a `Needs:` question. "Flag it" means one of those shapes; a guessed fact does not ship with a caveat attached to it.
+9. **A row the eight questions above don't reach?** Read the draft against [references/banned-patterns.md](references/banned-patterns.md). Questions 2 to 8 reach eight of its 13 rows - Negative parallelism, Em dash, Promotional adjective, Title Case in labels, Filler phrase and Copula avoidance together, Generic positive closer, and Vague attribution. The other five are Inflated significance, Forced rule of three, Decorative emoji, Apology with no fact, and Unnamed consequence. -> Fix it the way the row's fixed example does. A row this skill's own draft introduced is fixed and not reported: `Removed:` names what came out of the user's copy, never what the rewrite put in and took back out.
+
+Question 9 is where the count reconciles: eight rows reached by the questions above, five reached only by reading the table, and 13 in the file. Three of the five have no other gate anywhere in write mode. The two that do - Apology with no fact, Unnamed consequence - have a 2b rule behind them for the error and the destructive confirmation only, so an apology in a toast or an unnamed consequence in a tooltip meets nothing. "Congratulations! You've unlocked a whole new way to manage your projects." passes all eight: the exclamation mark has a sentence after it, so question 7 does not fire, and "whole new way" is not on question 4's adjective list.
 
 ## Edge cases
 
@@ -181,6 +186,7 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 | Existing copy already reads fine (strip mode) | Say so and skip the rewrite. "Reads fine" means both checks came back clean, not only the table. An empty "nothing to fix" is a valid result, not a failure to find something. |
 | Copy contains a real number or fact from the product | Preserve it exactly. Never invent or round a count, price, or limit that isn't in the input. |
 | Copy quotes a string that has to stay verbatim (a legal clause, a third-party product name, text the user typed) | An em dash inside the quotation stays. Fix the ones outside it, and name the one you left and why. An exact quote beats a clean dash count. |
+| A rewrite fixes the row that applied and introduces another one ("Enjoy a seamless checkout." -> "Checkout is fast, simple, and clear.") | Question 9 catches it at the gate. Fix it before the block ships, and leave the report lines alone: `Removed:` carries the row the original had, not the one the rewrite briefly grew. |
 
 ## Rules that hold in both modes
 
@@ -188,6 +194,7 @@ Scan the draft against these eight questions. **A single "yes" sends the line ba
 - No em dash in shipped copy, and no en dash standing in for one. Zero, not "not too many". Use a period, a comma, or " - " instead. A verbatim quotation is the only place one survives.
 - Never invent a number, a guarantee, or a capability that isn't in the input. A fact the line's own rule needs becomes a slot and a `Needs:` question, in either mode; a claim the original made and the input never confirmed is cut.
 - Strip mode runs both checks, the pattern table and the element's own rule from 2b. A clean pass on the table is one check out of two, not a verdict that the copy reads fine.
+- Every line this skill wrote is read against all 13 rows before it ships, at the step 4 gate. The checks in step 3b read the copy the user handed over; nothing else reads the copy we hand back.
 - An element type the request never stated is tested before its verdict ships: read the second plausible type's 2b rule too, and where the two disagree, ask which element it is rather than picking one. A stated type needs no test, and a split one produces a question, not a rewrite.
 - A failed self-check item means a rewrite, not a footnote explaining the tradeoff.
 - Compliance-reviewed copy needs a human sign-off before a meaning-changing edit ships.

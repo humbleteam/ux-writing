@@ -31,7 +31,9 @@ All examples below are invented for illustration - no real product, client, or u
 
 ## How to use this table
 
-In write mode, check a draft against every row before it ships. In strip mode, name the specific row(s) that applied to the original copy in the "Removed" line of the output - "Removed: promotional adjective, em dash" is more useful to the user than "Removed: AI tells".
+In write mode, check a draft against every row before it ships. The step that does it is the pre-ship gate, `SKILL.md` step 4: its first eight questions reach eight of the rows here, and its ninth reads the remaining five - Inflated significance, Forced rule of three, Decorative emoji, Apology with no fact, and Unnamed consequence. Write mode has no earlier check that reads this file, so a draft that skips the gate ships unchecked against all 13.
+
+In strip mode, name the specific row(s) that applied to the original copy in the "Removed" line of the output - "Removed: promotional adjective, em dash" is more useful to the user than "Removed: AI tells". Step 3b's check 1 reads the original, and only the original. The rewrite that replaces it reaches this table at the same step 4 gate, and a row the rewrite introduced is fixed there rather than reported: the "Removed" line names what came out of the user's copy, not what a rewrite put in and took back out.
 
 Five rows are bound to a specific element rather than to copy in general: Title Case in labels, Generic positive closer, Decorative emoji, Apology with no fact, and Unnamed consequence. They are still rows, checked the same way. Every tell this skill looks for has a row here, because a rewrite that names a row has to find one - see `SKILL.md` step 3d for what to do with a defect neither check covers.
 

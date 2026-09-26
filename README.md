@@ -12,7 +12,7 @@
 
 </div>
 
-ux-writing takes a UI component or flow - a button, an error message, an empty state, a confirmation dialog - and returns copy ready to ship: a verb-led label, a plain-language error, a consequence-named confirmation. Given copy that already exists, it switches to strip mode and rewrites it line by line, naming the pattern each fix removed and the element rule the line failed. A pre-ship self-check keeps either mode from drifting into generic filler: eight yes/no questions run against every draft, and one "yes" sends the line back for a rewrite.
+ux-writing takes a UI component or flow - a button, an error message, an empty state, a confirmation dialog - and returns copy ready to ship: a verb-led label, a plain-language error, a consequence-named confirmation. Given copy that already exists, it switches to strip mode and rewrites it line by line, naming the pattern each fix removed and the element rule the line failed. A pre-ship self-check keeps either mode from drifting into generic filler: nine yes/no questions run against every draft, the last of them the pattern table itself, and one "yes" sends the line back for a rewrite.
 
 ## Table of contents
 
@@ -30,7 +30,7 @@ ux-writing takes a UI component or flow - a button, an error message, an empty s
 
 - Writes microcopy for buttons, errors, empty states, confirmations, placeholders, tooltips, and toasts - one line per element, shippable as it stands or carrying a marked slot for a product fact the request never gave.
 - Rewrites existing copy that reads AI-generated, in strip mode, line by line, with Before/After pairs, naming the pattern each fix removed and the element rule the line failed.
-- Runs every draft through an eight-question pre-ship self-check; a failed check forces a rewrite, not a footnote.
+- Runs every draft through a nine-question pre-ship self-check, ending with the full 13-row pattern table; a failed check forces a rewrite, not a footnote.
 - Names the outcome in every button label instead of a bare verb like "Submit" or "OK".
 - Writes error copy as what happened plus how to fix it, with no blame and no bare apology.
 - Defers to a provided brand voice guide wherever its rules conflict with the defaults here.
@@ -174,6 +174,7 @@ tooltip verdict would rewrite a button label that was correct.
 
 - **Mode detection first.** A component or flow with no existing copy triggers write mode; a string of copy, or a request to fix copy that "sounds AI", triggers strip mode.
 - **The pattern table loads before either mode runs.** `references/banned-patterns.md` holds 13 AI-tell patterns, each with a bad and fixed example, checked before a draft is done.
+- **The table is read against the copy going out, not only the copy coming in.** Strip mode's first check reads it against the original; the pre-ship gate reads it against whatever this skill wrote - a written draft, or the rewrite that replaces a stripped line. The gate's first eight questions reach eight of the 13 rows, and the ninth reads the other five, so a draft cannot ship carrying a row this skill's own table names.
 - **A rewrite names what it fixed, on one of two lines.** Strip mode runs two checks: the pattern table, reported on `Removed:`, and the element's own rule, reported on `Rule:`. A block that ships a rewrite carries at least one of them. Both checks clean means the copy reads fine and the rewrite is skipped, not invented - a clean table pass alone does not, which is how a bare "Nothing here yet" used to come back as good copy.
 - **The second check is only as good as the element type it runs against.** Where the request states the type, it runs. Where the type was inferred from the shape of the string, the second plausible type's rule is read too: a bare "Save changes" passes the button rule and fails the tooltip rule, so the block asks which element it is instead of shipping either verdict as a finding about the copy.
 - **Buttons name the outcome.** Verb first, then the object, sentence case - never a bare "Submit" or "OK" when a concrete outcome exists to name.
@@ -182,17 +183,17 @@ tooltip verdict would rewrite a button label that was correct.
 - **Destructive confirmations name the consequence.** What gets removed, how much, whether it's reversible - never a generic "Are you sure?"
 - **Placeholder text is never a label's substitute.** If removing it would leave a field unlabeled, that's a bug to flag, not a copy choice.
 - **A fact the request never gave becomes a slot, not a guess.** Both modes mark the missing count or cause where it belongs and ask for it on a `Needs:` line: write mode when an element's rule needs a fact the request skipped, strip mode when the pattern that applied is one of the two fixed by adding a fact rather than cutting one, or when the element rule the line failed is. Elements whose rules need no product fact still ship as finished copy in the same block.
-- **The eight-question self-check runs before every output ships.** One "yes" sends the line back for a rewrite.
+- **The nine-question self-check runs before every output ships.** One "yes" sends the line back for a rewrite.
 - **Legal or compliance-reviewed copy gets flagged, not silently rewritten.** A meaning-changing edit needs a human sign-off first.
 
 ## How is this different from just asking the model?
 
-A bare "write me a button label" prompt tends to return exactly the copy this skill exists to catch: "Submit", or an error that opens with "Oops! Something went wrong" and gives no next step. It also drifts toward promotional filler - "seamlessly", "effortlessly" - words that sound confident but tell the user nothing to do. This skill pins the shape down per element type (button = verb plus outcome, error = cause plus fix, confirmation = named consequence) and runs a fixed eight-question check before the draft ships, so the output holds shape run to run. It does not know your product's actual voice - a provided brand voice guide wins where its rules conflict with the defaults here.
+A bare "write me a button label" prompt tends to return exactly the copy this skill exists to catch: "Submit", or an error that opens with "Oops! Something went wrong" and gives no next step. It also drifts toward promotional filler - "seamlessly", "effortlessly" - words that sound confident but tell the user nothing to do. This skill pins the shape down per element type (button = verb plus outcome, error = cause plus fix, confirmation = named consequence) and runs a fixed nine-question check before the draft ships, so the output holds shape run to run. It does not know your product's actual voice - a provided brand voice guide wins where its rules conflict with the defaults here.
 
 ## FAQ
 
 **How do I make AI writing sound human?**
-Cut patterns that read as generated before the copy ships: promotional adjectives (seamless, effortless), negative parallelism ("it's not just X - it's Y"), filler openers ("in order to"), and copula avoidance ("serves as" instead of "is"). This skill checks every draft against eight questions; `references/banned-patterns.md` has the full table.
+Cut patterns that read as generated before the copy ships: promotional adjectives (seamless, effortless), negative parallelism ("it's not just X - it's Y"), filler openers ("in order to"), and copula avoidance ("serves as" instead of "is"). This skill checks every draft against nine questions, the last of which is the full table; `references/banned-patterns.md` has it.
 
 **What are AI writing tells?**
 Patterns that show up disproportionately in generated text: promotional adjectives, negative parallelism, vague attributions, forced rule-of-three lists, em dashes (one is enough to read as generated, which is why the check here fires at one, not at two), generic upbeat closers. In interface copy they also show up as Title Case buttons, "Oops!" errors with no fact, and "Are you sure?" dialogs that never say what happens if you are. `references/banned-patterns.md` lists all 13 with a before/after example each.

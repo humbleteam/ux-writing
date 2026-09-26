@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.7.0] - 2026-09-26
+
+- The pattern table was never read against a line this skill wrote. Step 3b's check 1 reads it against the original the user handed over; write mode had no step that read it at all, and the rewrite that replaces a stripped line was read by nothing. `references/banned-patterns.md` had said "in write mode, check a draft against every row before it ships" since the file was written, and no step in `SKILL.md` did it.
+- What stood in for it was step 4, and step 4 reached eight of the 13 rows. Questions 2 to 8 are Negative parallelism, Em dash, Promotional adjective, Title Case in labels, Filler phrase and Copula avoidance together, Generic positive closer, and Vague attribution. Five rows had no question: Inflated significance, Forced rule of three, Decorative emoji, Apology with no fact, and Unnamed consequence.
+- Three of those five had no other gate anywhere in write mode. "Congratulations! You've unlocked a whole new way to manage your projects." passes all eight - question 7 wants an exclamation mark with nothing after it and this one has a sentence, and "whole new way" is not on question 4's adjective list - so the table's own first row shipped as finished copy. A rule of three whose third item is not a promotional adjective and a decorative emoji pass the same way.
+- The other two, Apology with no fact and Unnamed consequence, have a 2b rule behind them for the error and the destructive confirmation only. An apology in a toast or an unnamed consequence in a tooltip meets neither the 2b rule for its own type nor a question here.
+- Step 4 is now nine questions. The ninth reads the draft against the five rows the other eight do not reach, and the count reconciles where a reader can check it: eight reached by the questions, five by the row read, 13 in the file.
+- A row the draft introduced is fixed at the gate and not reported. `Removed:` names what came out of the user's copy, never what a rewrite put in and took back out, so a block's report lines are unchanged by anything question 9 catches.
+- Said where the table is read, on the three surfaces that describe the checks: step 0, the gate's own opening, and a new rule in "Rules that hold in both modes". New edge case for a rewrite that fixes the row that applied and introduces another one. `references/banned-patterns.md` now names the step that runs it in each mode, and says check 1 reads the original and only the original. README updated wherever it said eight questions.
+
 ## [1.6.0] - 2026-09-21
 
 - Check 2 ran against a guessed element type with nothing testing the guess. 1.5.0 made strip mode read the 2b rule for the type named in 3a, and 3a names it two different ways: the user states it, or it is inferred from the shape of the string. An inferred type is a guess about the element that then decides which rule the copy is judged against, and the same string passes one rule and fails another.
