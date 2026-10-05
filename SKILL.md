@@ -24,6 +24,15 @@ If the request gives neither a component to write for nor a string to rewrite, a
 
 If the user names the element (button, error, empty state), use it directly. If they only describe a flow ("write the copy for deleting a project"), break it into the elements that flow actually needs - usually a button, a confirmation, an error, and a success message - and write each one.
 
+A third case is neither of those: the request describes one piece of copy and never says what element it is ("write the line that explains why the Publish button is disabled"). Infer the type from the request, and then test the inference, because here it decides more than it does in strip mode. There an inferred type picks the rule a finished string is judged against, so a wrong one ships a wrong verdict about a line that may be correct. Here it picks the rule the line is built to, so a wrong one ships copy shaped for an element the screen does not have: as a tooltip that line states the condition now, "Publishing needs a title and at least one section", and as an error message it has to state what happened and how to fix it, which reports a failure that has not occurred.
+
+So name the one other type the request could plausibly be asking for, read that rule too, and compare the lines the two rules produce. The inferred type stands either way - this test does not re-pick it, and there is no second string for two rules to agree or disagree about, which is why the branches here are not 3a's:
+
+- **The two rules produce the same line.** The inference decided nothing. Ship the block, marking the type inferred (2d) so the user can correct it.
+- **The two rules produce different lines.** The type decided the output. Ship the line for the inferred type, still marked inferred, and ask which element it is under the block, naming both candidates and what each changes about the line (2d). A written line is a draft, and 2c already says what a draft missing something does: it ships with the gap named and the question under it. Withholding the copy is the one move not available - 2c forbids dropping an element to avoid its question, and unlike 3a there is no existing line here that a wrong verdict could call broken.
+
+A type the user stated never runs this test, and neither does an element the flow decomposition created: its type is fixed by the decision that it belongs in the flow at all. What that path can get wrong is which elements the flow has - a delete that is reversible wants a toast carrying an undo and no confirmation dialog - and reading a second type's rule catches none of that.
+
 ### 2b. Apply the rule for that element type
 
 | Element | Rule | Shape |
@@ -56,13 +65,18 @@ Elements whose rules need no product fact ship as finished copy in the same bloc
 ## <Component or flow name>
 
 **<Element type>:** <copy>
-**<Element type>:** <copy>
+**<Element type> [inferred]:** <copy>
 **<Element type>:** <copy>
 
 **Needs:** <one question per slot, semicolon-separated>
+**Type:** <the two candidate element types, and what each changes about the line>
 ```
 
 One line per element, labeled by type, in the order a user would meet them. The `Needs:` line appears only when a line in the block carries a slot - an empty one is never shipped, the same way an empty `Removed:` is not. For a multi-element flow (a delete confirmation, say), that order is usually: button, confirmation dialog, error, success toast.
+
+A type the request stated carries no marker. A type this skill inferred carries `[inferred]` on its label, and that marker is the only thing telling the reader which labels were their words and which were ours. The labels sit in one block next to each other, so without it a guess reads as a settled fact. An element the flow decomposition created counts as stated here: the request named the flow, and the element is in the block because the flow needs it.
+
+`Type:` appears only where an inferred type's two candidate rules produced different lines (2a), one entry per such element, and it is never shipped empty. It does not replace the copy the way strip mode's `Type:` line replaces a verdict: the line above it is written and usable, and the question is about which element it belongs to. `Needs:` and `Type:` are different questions and one block can carry both - a slot is a fact the line needs, `Type:` is which element the line is. Answered, the block is re-emitted whole with the marker dropped from every label the answer settled.
 
 ## Step 3 - strip mode
 
@@ -176,7 +190,9 @@ Question 9 is where the count reconciles: eight rows reached by the questions ab
 | Copy is legal or compliance-reviewed (terms, consent language, pricing disclaimers) | Flag it as compliance copy instead of rewriting the meaning. Fix only surface AI-tells (em dashes, Title Case) if asked, and say plainly that a meaning-changing edit needs human sign-off first. |
 | A brand voice guide is provided | It wins over the defaults in this skill wherever the two conflict. Apply the voice guide's rules first, and fall back to this skill's rules for anything the guide doesn't cover. |
 | Request is for non-English copy | The structural rules hold in any language (verb-led buttons, cause-then-fix errors, named consequences). Say plainly that the vocabulary list in `references/banned-patterns.md` is English-specific and does not transfer word for word. |
-| Element type isn't stated (write mode) | Infer it from context, write the copy, and name the inferred type in the output so the user can correct it. |
+| Element type isn't stated (write mode) | Infer it from the request, then run 2a's test: read the one other plausible type's rule too. Write the copy to the inferred type either way, mark its label `[inferred]` so the user can correct it, and add the `Type:` question when the two rules would produce different lines. |
+| Write mode infers a single element's type and both candidates sit on one 2b row (a button or a link to the same destination) | One rule, so one line, and the inference decided nothing. Ship the block with the label marked `[inferred]` and no `Type:` question. |
+| Write mode infers a single element's type and the two candidates produce different lines ("the line explaining why Publish is disabled" - a tooltip states the condition, an error states a failure that has not happened) | Write the line for the inferred type, mark its label `[inferred]`, and ask which element it is on a `Type:` line. Do not hold the copy back: a draft with its question under it is 2c's shape, and there is no existing line here for a wrong verdict to call broken. |
 | An element's rule needs a product fact the request never gave (how many items a delete removes, why an upload fails) | Write the line with a named slot where the fact belongs and ask for it on the `Needs:` line. Never fill a slot with a plausible value, and never drop the element to avoid the question - a confirmation with no consequence named is the pattern this skill exists to catch. |
 | The row that applied is only fixable by adding a fact the input never gave ("Are you sure?", "Oops! Something went wrong.") | Rewrite with a named slot where the fact belongs and ask for it on the `Needs:` line. Do not skip the rewrite - a row applied, so the copy is not fine - and do not fill the slot with a plausible cause or count. |
 | Strip mode is handed a line with no tell that still fails its element's rule ("Nothing here yet.", "Submit", a tooltip repeating its own label) | Rewrite it. No row applied is the expected result of check 1 here, not a verdict - check 2 is the one that catches these. Leave `Removed:` off the block, name the failed rule on `Rule:`, and slot any fact the fix needs. |
@@ -195,7 +211,7 @@ Question 9 is where the count reconciles: eight rows reached by the questions ab
 - Never invent a number, a guarantee, or a capability that isn't in the input. A fact the line's own rule needs becomes a slot and a `Needs:` question, in either mode; a claim the original made and the input never confirmed is cut.
 - Strip mode runs both checks, the pattern table and the element's own rule from 2b. A clean pass on the table is one check out of two, not a verdict that the copy reads fine.
 - Every line this skill wrote is read against all 13 rows before it ships, at the step 4 gate. The checks in step 3b read the copy the user handed over; nothing else reads the copy we hand back.
-- An element type the request never stated is tested before its verdict ships: read the second plausible type's 2b rule too, and where the two disagree, ask which element it is rather than picking one. A stated type needs no test, and a split one produces a question, not a rewrite.
+- An element type the request never stated is tested before anything built on it ships, in both modes: read the second plausible type's 2b rule too. What the test protects differs, because the type decides a different thing in each mode. In strip mode it decides the rule a finished string is judged against, so a split ships no verdict on check 2 and asks which element it is instead. In write mode it decides the rule the line is built to, so a split ships the line marked `[inferred]` with the question under it, because holding back copy the request asked for is not one of this skill's moves. A stated type needs no test in either mode.
 - A failed self-check item means a rewrite, not a footnote explaining the tradeoff.
 - Compliance-reviewed copy needs a human sign-off before a meaning-changing edit ships.
 - Keep the tone direct. No hedging ("this might possibly need a better label") - either fix it or leave it.
