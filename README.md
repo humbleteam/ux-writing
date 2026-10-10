@@ -30,7 +30,7 @@ ux-writing takes a UI component or flow - a button, an error message, an empty s
 
 - Writes microcopy for buttons, errors, empty states, confirmations, placeholders, tooltips, and toasts - one line per element, shippable as it stands or carrying a marked slot for a product fact the request never gave.
 - Rewrites existing copy that reads AI-generated, in strip mode, line by line, with Before/After pairs, naming the pattern each fix removed and the element rule the line failed.
-- Runs every draft through a nine-question pre-ship self-check, ending with the full 13-row pattern table; a failed check forces a rewrite, not a footnote.
+- Runs every draft through a ten-question pre-ship self-check: nine read a line, ending with the full 13-row pattern table, and the tenth reads a flow's element set; a failed check forces a rewrite, not a footnote.
 - Names the outcome in every button label instead of a bare verb like "Submit" or "OK".
 - Writes error copy as what happened plus how to fix it, with no blame and no bare apology.
 - Defers to a provided brand voice guide wherever its rules conflict with the defaults here.
@@ -70,7 +70,7 @@ the flow and nothing else - no data model, no failure modes:
 **Button (destructive):** Delete project
 
 **Confirmation dialog:** Delete "<project name>"? This removes the project and
-all <n> <items> inside it. This can't be undone.
+all <n> <items> inside it. <Whether a delete can be undone>.
 
 **Buttons:** Cancel / Delete project
 
@@ -79,16 +79,22 @@ that cause>.
 
 **Toast (success):** Project deleted.
 
-**Needs:** Confirmation - what does a project hold, and how many of them go
-with it; Error - what actually blocks a delete in this product.
+**Needs:** Confirmation - what does a project hold, how many of them go with it,
+and does a delete come back, which also decides whether this dialog belongs;
+Error - what actually blocks a delete in this product.
 ```
 
 The button and the toast are finished copy: their rules need nothing the request
 did not carry. The confirmation and the error are drafts, because a named
-consequence and a stated cause are facts about the product, and the slots mark
-the two the request never gave. Answering them - a project holds tasks, this one
-holds 14, and a delete is blocked while members are still assigned, 2 on this
-project - fills the slots, drops the `Needs:` line, and re-emits the block:
+consequence, a stated cause and whether the action reverses are facts about the
+product, and the slots mark the three the request never gave. The last of them
+carries further than its own sentence: a delete that comes back wants a toast
+with an undo and no dialog at all, so the answer that fills that slot is also
+the one self-check question 10 reads the block against, which is why the `Needs:`
+line says so. Answering them - a project holds tasks, this one holds 14, a
+delete is permanent, and it is blocked while members are still assigned, 2 on
+this project - fills the slots, keeps the dialog, drops the `Needs:` line, and
+re-emits the block:
 
 ```
 **Confirmation dialog:** Delete "Q3 Roadmap"? This removes the project and
@@ -183,17 +189,17 @@ tooltip verdict would rewrite a button label that was correct.
 - **Destructive confirmations name the consequence.** What gets removed, how much, whether it's reversible - never a generic "Are you sure?"
 - **Placeholder text is never a label's substitute.** If removing it would leave a field unlabeled, that's a bug to flag, not a copy choice.
 - **A fact the request never gave becomes a slot, not a guess.** Both modes mark the missing count or cause where it belongs and ask for it on a `Needs:` line: write mode when an element's rule needs a fact the request skipped, strip mode when the pattern that applied is one of the two fixed by adding a fact rather than cutting one, or when the element rule the line failed is. Elements whose rules need no product fact still ship as finished copy in the same block.
-- **The nine-question self-check runs before every output ships.** One "yes" sends the line back for a rewrite.
+- **The ten-question self-check runs before every output ships.** One "yes" sends the line back for a rewrite. Nine of the questions read a line; the tenth reads the elements a flow was broken into, which is the one path whose output nothing else checks - a stated type runs its rule and an inferred one is tested, while an element the decomposition invented is treated as stated. A confirmation dialog on a reversible delete passes every other question in the file.
 - **Legal or compliance-reviewed copy gets flagged, not silently rewritten.** A meaning-changing edit needs a human sign-off first.
 
 ## How is this different from just asking the model?
 
-A bare "write me a button label" prompt tends to return exactly the copy this skill exists to catch: "Submit", or an error that opens with "Oops! Something went wrong" and gives no next step. It also drifts toward promotional filler - "seamlessly", "effortlessly" - words that sound confident but tell the user nothing to do. This skill pins the shape down per element type (button = verb plus outcome, error = cause plus fix, confirmation = named consequence) and runs a fixed nine-question check before the draft ships, so the output holds shape run to run. It does not know your product's actual voice - a provided brand voice guide wins where its rules conflict with the defaults here.
+A bare "write me a button label" prompt tends to return exactly the copy this skill exists to catch: "Submit", or an error that opens with "Oops! Something went wrong" and gives no next step. It also drifts toward promotional filler - "seamlessly", "effortlessly" - words that sound confident but tell the user nothing to do. This skill pins the shape down per element type (button = verb plus outcome, error = cause plus fix, confirmation = named consequence) and runs a fixed ten-question check before the draft ships, so the output holds shape run to run. It does not know your product's actual voice - a provided brand voice guide wins where its rules conflict with the defaults here.
 
 ## FAQ
 
 **How do I make AI writing sound human?**
-Cut patterns that read as generated before the copy ships: promotional adjectives (seamless, effortless), negative parallelism ("it's not just X - it's Y"), filler openers ("in order to"), and copula avoidance ("serves as" instead of "is"). This skill checks every draft against nine questions, the last of which is the full table; `references/banned-patterns.md` has it.
+Cut patterns that read as generated before the copy ships: promotional adjectives (seamless, effortless), negative parallelism ("it's not just X - it's Y"), filler openers ("in order to"), and copula avoidance ("serves as" instead of "is"). This skill checks every draft against ten questions, the ninth of which is the full table; `references/banned-patterns.md` has it.
 
 **What are AI writing tells?**
 Patterns that show up disproportionately in generated text: promotional adjectives, negative parallelism, vague attributions, forced rule-of-three lists, em dashes (one is enough to read as generated, which is why the check here fires at one, not at two), generic upbeat closers. In interface copy they also show up as Title Case buttons, "Oops!" errors with no fact, and "Are you sure?" dialogs that never say what happens if you are. `references/banned-patterns.md` lists all 13 with a before/after example each.

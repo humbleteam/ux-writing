@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.9.0] - 2026-10-10
+
+- Step 4 gains a tenth question, and it is the first gate on 2a's flow-decomposition path. 1.8.0 named what that path can get wrong - which elements the flow has, not what type each one is - and nothing checked it. A stated type runs its 2b rule, an inferred type runs 2a's test as well, and an element the decomposition created had neither: 2d counts it as stated, so it ships unmarked.
+- Question 10 reads the block where questions 1 to 9 each read a line. A confirmation dialog on a delete that comes back, or a destructive action with no confirmation anywhere, passes all nine. It is the only question whose fix can remove a line instead of rewriting one, and the only one a single-element request never fires: one element is not a set.
+- Where the request never gave the fact the set turns on, the question rides on the slot that fact already has. It does not add an output line. 2c's bar holds on the other branch: a missing element is written with its facts slotted, never left out to avoid the question it would raise.
+- Reversibility was the one fact of the destructive-confirmation rule that no example slotted. 2b asks for what gets removed, how much, and whether it is reversible, and 2c already classes "whether it comes back" as a product fact; the README's write-mode example states the request named the flow and nothing else, slots the item and the count, and asserts `This can't be undone.` as finished copy. Self-check 8 forbids exactly that, which is the evidence that nothing was reading the decomposition path's output.
+- The example now slots it, and the `Needs:` question for it names what else the answer settles: a delete that comes back wants a toast with an undo and no dialog, so that one answer decides both the sentence and the element. The filled block answers it and keeps the dialog. The slot form quoted in `references/banned-patterns.md` carries the same clause, on the same footing as the count.
+- No rule changed. 2a, 2b's table, 2d's output format and the both-modes rules are untouched, and every line of the new question is what 2b, 2c and 2d already require.
+
 ## [1.8.0] - 2026-10-05
 
 - An inferred element type was tested in strip mode only. 1.6.0 gave step 3a the test - name the one other type the string could plausibly be, read that rule too, and where the two disagree ask which element it is - and write mode infers a type as well: the edge case for an unstated write-mode type said to infer it from context, write the copy, and name the inference, with nothing checking it.
