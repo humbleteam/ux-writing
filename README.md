@@ -12,7 +12,7 @@
 
 </div>
 
-ux-writing takes a UI component or flow - a button, an error message, an empty state, a confirmation dialog - and returns copy ready to ship: a verb-led label, a plain-language error, a consequence-named confirmation. Given copy that already exists, it switches to strip mode and rewrites it line by line, naming the pattern each fix removed and the element rule the line failed. A pre-ship self-check keeps either mode from drifting into generic filler: nine yes/no questions run against every draft, the last of them the pattern table itself, and one "yes" sends the line back for a rewrite.
+ux-writing takes a UI component or flow - a button, an error message, an empty state, a confirmation dialog - and returns copy ready to ship: a verb-led label, a plain-language error, a consequence-named confirmation. Given copy that already exists, it switches to strip mode and rewrites it line by line, naming the pattern each fix removed and the element rule the line failed. A pre-ship self-check keeps either mode from drifting into generic filler: ten yes/no questions run against every draft, nine reading one line each and ending with the pattern table itself, the tenth reading the element set a flow was broken into, and one "yes" sends the line back for a rewrite.
 
 ## Table of contents
 

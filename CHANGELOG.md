@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1] - 2026-10-17
+
+- 1.9.0 added the tenth self-check question and brought four README surfaces along with it: the "What it does" bullet, the "How it works" bullet, the paragraph on how this differs from asking the model, and the FAQ answer that names the table as the ninth question. The lede was the one it missed, and that is the paragraph a reader and a model meet first, directly under the badges.
+- It stated the gate as "nine yes/no questions run against every draft, the last of them the pattern table itself". Both halves stopped being true at 1.9.0: there are ten questions, and the pattern table is question 9 rather than the last one, because question 10 reads a flow's element set.
+- A count that contradicts four other passages in its own file is worse than a count nobody states. The summary sentence is the one a reader quotes without reading down to the bullet that would have corrected it.
+- The lede now carries the shape those four surfaces already carry: ten questions, nine reading one line each and ending with the table, the tenth reading the element set a flow was broken into. No question, rule or output format changed.
+
 ## [1.9.0] - 2026-10-10
 
 - Step 4 gains a tenth question, and it is the first gate on 2a's flow-decomposition path. 1.8.0 named what that path can get wrong - which elements the flow has, not what type each one is - and nothing checked it. A stated type runs its 2b rule, an inferred type runs 2a's test as well, and an element the decomposition created had neither: 2d counts it as stated, so it ships unmarked.
