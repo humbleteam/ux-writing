@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.10.0] - 2026-10-22
+
+- The pattern table had no row for a preamble, and step 4 question 1 had been checking for one since the gate was written. That made it the one tell this skill looks for and could not name, against `references/banned-patterns.md`'s own standing claim that every tell it looks for has a row there.
+- The two sides of the gate are not symmetrical, and the gap only shows on one of them. Question 1 reads our own drafts, so a framing opener this skill wrote was caught and deleted. Strip mode reports the row that applied, so the same shape in the copy a user handed over had nothing to put on the `Removed:` line - and step 3d's rule for a defect neither check covers sent a plain AI tell to a `Note:` line as if the table had never heard of it.
+- That is the same hole the Apology with no fact and Unnamed consequence rows were added to close in August, reached from the question side rather than the element side: a tell the skill gates and the table cannot name.
+- New Preamble row, with the bad and fixed example the other 13 carry: "Here's your confirmation: your changes have been saved." against "Changes saved." It is a general row, not one of the five bound to an element, and its fix takes out the opener and leaves the message behind it alone.
+- The row also reconciles two accountings that had drifted apart. `SKILL.md` attributed the eight table rows the gate reaches to questions 2 to 8, and `references/banned-patterns.md` and the README both attributed them to the first eight questions. Both were readings of the same fact - question 1 reached no row - and the second one hid it, because a reader who believes question 1 has a row never goes looking for the one it does not have. Questions 1 to 8 now reach nine of the 14 rows, question 6 reaching two of them, and question 9 reads the remaining five.
+- Counts migrated wherever they are stated: 13 to 14 rows in `SKILL.md` step 0, 3b, 3d and the both-modes rules, in the reference file's lede, its usage notes and its coverage table, and in four README passages; eleven rows fixed by cutting to twelve, the new one being an opener. The reference file's account of the gate now says it runs ten questions rather than stopping at the ninth, which 1.9.0 and 1.9.1 both left behind.
+- No question, rule or output format changed. The gate still has ten questions, question 9 still reads the five rows nothing else reaches, and the element-bound set is still five.
+
 ## [1.9.1] - 2026-10-17
 
 - 1.9.0 added the tenth self-check question and brought four README surfaces along with it: the "What it does" bullet, the "How it works" bullet, the paragraph on how this differs from asking the model, and the FAQ answer that names the table as the ninth question. The lede was the one it missed, and that is the paragraph a reader and a model meet first, directly under the badges.

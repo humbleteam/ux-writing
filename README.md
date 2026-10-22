@@ -30,7 +30,7 @@ ux-writing takes a UI component or flow - a button, an error message, an empty s
 
 - Writes microcopy for buttons, errors, empty states, confirmations, placeholders, tooltips, and toasts - one line per element, shippable as it stands or carrying a marked slot for a product fact the request never gave.
 - Rewrites existing copy that reads AI-generated, in strip mode, line by line, with Before/After pairs, naming the pattern each fix removed and the element rule the line failed.
-- Runs every draft through a ten-question pre-ship self-check: nine read a line, ending with the full 13-row pattern table, and the tenth reads a flow's element set; a failed check forces a rewrite, not a footnote.
+- Runs every draft through a ten-question pre-ship self-check: nine read a line, ending with the full 14-row pattern table, and the tenth reads a flow's element set; a failed check forces a rewrite, not a footnote.
 - Names the outcome in every button label instead of a bare verb like "Submit" or "OK".
 - Writes error copy as what happened plus how to fix it, with no blame and no bare apology.
 - Defers to a provided brand voice guide wherever its rules conflict with the defaults here.
@@ -131,7 +131,7 @@ and the question under it, the same shape write mode uses:
 ```
 
 The rule is the same one that governs numbers: what the input does not say, the
-output does not say. Eleven of the 13 patterns are fixed by cutting something,
+output does not say. Twelve of the 14 patterns are fixed by cutting something,
 so no slot can arise on them - only the two fixed by adding a fact, an apology
 with no fact and an unnamed consequence, can produce one.
 
@@ -139,7 +139,7 @@ The pattern table is one of two checks, though, and a slot can also come from
 the other. Strip mode reads the copy against its element's own rule as well, and
 a line can carry no tell at all and still fail the job its type has. A bare empty
 state is the clearest case: it has no adjective, no dash, no Title Case and no
-closer, so every one of the 13 patterns comes back clean, while the empty-state
+closer, so every one of the 14 patterns comes back clean, while the empty-state
 rule names that exact wording as the failure.
 
 ```
@@ -179,8 +179,8 @@ tooltip verdict would rewrite a button label that was correct.
 ## How it works
 
 - **Mode detection first.** A component or flow with no existing copy triggers write mode; a string of copy, or a request to fix copy that "sounds AI", triggers strip mode.
-- **The pattern table loads before either mode runs.** `references/banned-patterns.md` holds 13 AI-tell patterns, each with a bad and fixed example, checked before a draft is done.
-- **The table is read against the copy going out, not only the copy coming in.** Strip mode's first check reads it against the original; the pre-ship gate reads it against whatever this skill wrote - a written draft, or the rewrite that replaces a stripped line. The gate's first eight questions reach eight of the 13 rows, and the ninth reads the other five, so a draft cannot ship carrying a row this skill's own table names.
+- **The pattern table loads before either mode runs.** `references/banned-patterns.md` holds 14 AI-tell patterns, each with a bad and fixed example, checked before a draft is done.
+- **The table is read against the copy going out, not only the copy coming in.** Strip mode's first check reads it against the original; the pre-ship gate reads it against whatever this skill wrote - a written draft, or the rewrite that replaces a stripped line. The gate's first eight questions reach nine of the 14 rows, and the ninth reads the other five, so a draft cannot ship carrying a row this skill's own table names.
 - **A rewrite names what it fixed, on one of two lines.** Strip mode runs two checks: the pattern table, reported on `Removed:`, and the element's own rule, reported on `Rule:`. A block that ships a rewrite carries at least one of them. Both checks clean means the copy reads fine and the rewrite is skipped, not invented - a clean table pass alone does not, which is how a bare "Nothing here yet" used to come back as good copy.
 - **An inferred element type is tested in both modes.** Where the request states the type, its rule just runs. Where the type was inferred, the second plausible type's rule is read too, and what that protects differs by mode. In strip mode it protects a verdict: a bare "Save changes" passes the button rule and fails the tooltip rule, so the block asks which element it is instead of shipping either verdict as a finding about the copy. In write mode it protects the line itself, because the type picks the rule the copy is built to - the line explaining why Publish is disabled states the condition as a tooltip and reports a failure that has not happened as an error - so the label ships marked `[inferred]` with the question under the block rather than the copy held back.
 - **Buttons name the outcome.** Verb first, then the object, sentence case - never a bare "Submit" or "OK" when a concrete outcome exists to name.
@@ -202,7 +202,7 @@ A bare "write me a button label" prompt tends to return exactly the copy this sk
 Cut patterns that read as generated before the copy ships: promotional adjectives (seamless, effortless), negative parallelism ("it's not just X - it's Y"), filler openers ("in order to"), and copula avoidance ("serves as" instead of "is"). This skill checks every draft against ten questions, the ninth of which is the full table; `references/banned-patterns.md` has it.
 
 **What are AI writing tells?**
-Patterns that show up disproportionately in generated text: promotional adjectives, negative parallelism, vague attributions, forced rule-of-three lists, em dashes (one is enough to read as generated, which is why the check here fires at one, not at two), generic upbeat closers. In interface copy they also show up as Title Case buttons, "Oops!" errors with no fact, and "Are you sure?" dialogs that never say what happens if you are. `references/banned-patterns.md` lists all 13 with a before/after example each.
+Patterns that show up disproportionately in generated text: framing openers ("Here's your..."), promotional adjectives, negative parallelism, vague attributions, forced rule-of-three lists, em dashes (one is enough to read as generated, which is why the check here fires at one, not at two), generic upbeat closers. In interface copy they also show up as Title Case buttons, "Oops!" errors with no fact, and "Are you sure?" dialogs that never say what happens if you are. `references/banned-patterns.md` lists all 14 with a before/after example each.
 
 **How do I write good error messages?**
 State what happened, then how to fix it. "The project didn't delete because it still has 2 members assigned. Remove the members first, then try again" beats "Oops! Something went wrong" - it gives a fact and an action, not an apology. Never blame the user.
