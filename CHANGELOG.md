@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1] - 2026-10-27
+
+- 1.10.0 added the Preamble row and migrated the counts wherever they are stated, but it left one list behind: the README passage on a bare empty state still enumerated four shapes, "no adjective, no dash, no Title Case and no closer", and read them against all 14 rows.
+- That list is not prose about the table, it is the check a reader runs by hand. Its job is to show why "Nothing here yet." clears every row, so a shape missing from it is a row the reader never thinks to test - and after 1.10.0 the missing one was the row that release had just added.
+- The passage is also where the omission costs most. It is the worked case for the second check, the one making the point that a line can carry no tell at all and still fail the rule its element type has. A reader who can still name an untested tell has reason to doubt that premise rather than the copy in front of it.
+- The list now names the preamble first, which is the table's own order. `references/banned-patterns.md`'s coverage table already recorded the empty state as reaching no rows, so the count the list is read against was right and only the enumeration was short. No question, rule, row or output format changed.
+
 ## [1.10.0] - 2026-10-22
 
 - The pattern table had no row for a preamble, and step 4 question 1 had been checking for one since the gate was written. That made it the one tell this skill looks for and could not name, against `references/banned-patterns.md`'s own standing claim that every tell it looks for has a row there.

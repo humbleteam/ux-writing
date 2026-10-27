@@ -138,9 +138,9 @@ with no fact and an unnamed consequence, can produce one.
 The pattern table is one of two checks, though, and a slot can also come from
 the other. Strip mode reads the copy against its element's own rule as well, and
 a line can carry no tell at all and still fail the job its type has. A bare empty
-state is the clearest case: it has no adjective, no dash, no Title Case and no
-closer, so every one of the 14 patterns comes back clean, while the empty-state
-rule names that exact wording as the failure.
+state is the clearest case: it has no preamble, no adjective, no dash, no Title
+Case and no closer, so every one of the 14 patterns comes back clean, while the
+empty-state rule names that exact wording as the failure.
 
 ```
 ### Empty state
